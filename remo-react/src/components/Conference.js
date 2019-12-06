@@ -8,6 +8,7 @@ import {
   useParams
 } from "react-router-dom";
 import Offline from "react-offline";
+import Webcam from "react-webcam";
 
 import { Component } from "react";
 
@@ -110,6 +111,12 @@ class Conference extends Component {
             );
           }}
         </Offline>
+        <Webcam
+          audio={false}
+          height={720}
+          screenshotFormat="image/jpeg"
+          width={1280}
+        />
       </div>
     );
   }

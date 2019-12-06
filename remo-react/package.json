@@ -8,6 +8,7 @@
     "react-offline": "^0.1.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
+    "react-webcam": "^4.0.0",
     "socket.io-client": "^2.3.0"
   },
   "scripts": {
