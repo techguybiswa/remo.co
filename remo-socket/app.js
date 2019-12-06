@@ -32,6 +32,9 @@ io.on("connection", function(socket) {
   socket.on("internet issue resolved emit", data => {
     io.emit("internet issue resolved", { data: data });
   });
+  socket.on("camera error emit", data => {
+    io.emit("camera issue", { data: data });
+  });
 
   // socket.emit("news", { hello: "world" });
   // socket.on("disconnect", function() {

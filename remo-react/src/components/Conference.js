@@ -52,6 +52,11 @@ class Conference extends Component {
     this.state.socket.on("internet issue resolved", data => {
       console.log(data.data.username + " is online again!");
     });
+    this.state.socket.on("camera issue", data => {
+      console.log(
+        data.data.username + " has got webcam issues and cannot start broadcast"
+      );
+    });
   };
   startBroadcast = () => {
     if (this.state.broadcastState == "Start Broadcast") {
@@ -85,6 +90,13 @@ class Conference extends Component {
       });
     }
   };
+  cameraHasError = () => {
+    console.log("Cam has error");
+    this.state.socket.emit("camera error emit", {
+      username: this.state.username
+    });
+  };
+  // chrome://settings/content/siteDetails?site=http%3A%2F%2Flocalhost%3A3000
   componentDidMount() {
     this.setState({
       username: this.props.match.params.username
@@ -92,6 +104,18 @@ class Conference extends Component {
     this.initializeSockets();
   }
   render() {
+    let cameraModule =
+      this.state.broadcastState == "Start Broadcast" ? (
+        ""
+      ) : (
+        <Webcam
+          audio={false}
+          height={720}
+          screenshotFormat="image/jpeg"
+          width={1280}
+          onUserMediaError={this.cameraHasError}
+        />
+      );
     return (
       <div>
         <h1>Welcome to conference</h1>
@@ -111,12 +135,7 @@ class Conference extends Component {
             );
           }}
         </Offline>
-        <Webcam
-          audio={false}
-          height={720}
-          screenshotFormat="image/jpeg"
-          width={1280}
-        />
+        {cameraModule}
       </div>
     );
   }
