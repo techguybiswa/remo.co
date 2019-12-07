@@ -117,8 +117,13 @@ class Conference extends Component {
         />
       );
     return (
-      <div>
-        <h1>Welcome to conference</h1>
+      <div
+        style={{
+          backgroundImage: `url('https://i.ibb.co/TRknhGM/Screenshot-2019-12-07-at-8-52-18-PM.png')`,
+          height: "100vh",
+          paddingTop: "10px"
+        }}
+      >
         <button onClick={this.startBroadcast}>
           {this.state.broadcastState}
         </button>
