@@ -80,7 +80,7 @@ class Login extends Component {
                   cursor: "pointer"
                 }}
               >
-                Submit
+                Join Table
               </button>
             </Link>
             <p style={{ marginTop: "40px" }}>
