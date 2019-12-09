@@ -21,7 +21,10 @@ class Conference extends Component {
     this.state = {
       username: "",
       broadcastState: "Start Broadcast",
-      socket: io("http://localhost")
+      socket: io("http://localhost"),
+      showNotification: false,
+      listOfCurrentNotifications: [],
+      newNotificationCounter: 0
     };
   }
 
@@ -37,7 +40,6 @@ class Conference extends Component {
       });
     });
     this.state.socket.on("new user", data => {
-      console.log("React se new user connected is getting called");
       console.log(
         "New user is 1998 " +
           this.state.username +
@@ -49,10 +51,24 @@ class Conference extends Component {
           type: toast.TYPE.SUCCESS,
           autoClose: 2000
         });
+        this.setState({
+          listOfCurrentNotifications: [
+            ...this.state.listOfCurrentNotifications,
+            "You have successfully joined the table!"
+          ],
+          newNotificationCounter: this.state.newNotificationCounter + 1
+        });
       } else {
         toast(`${data.data.username} has successfully joined the table`, {
           type: toast.TYPE.SUCCESS,
           autoClose: 2000
+        });
+        this.setState({
+          listOfCurrentNotifications: [
+            ...this.state.listOfCurrentNotifications,
+            `${data.data.username} has successfully joined the table`
+          ],
+          newNotificationCounter: this.state.newNotificationCounter + 1
         });
       }
     });
@@ -63,10 +79,24 @@ class Conference extends Component {
           type: toast.TYPE.SUCCESS,
           autoClose: 2000
         });
+        this.setState({
+          listOfCurrentNotifications: [
+            ...this.state.listOfCurrentNotifications,
+            "Your broadcast started successfully!"
+          ],
+          newNotificationCounter: this.state.newNotificationCounter + 1
+        });
       } else {
         toast(`Broadcast is started by ${data.data.username}`, {
           type: toast.TYPE.SUCCESS,
           autoClose: 2000
+        });
+        this.setState({
+          listOfCurrentNotifications: [
+            ...this.state.listOfCurrentNotifications,
+            `Broadcast is started by ${data.data.username}`
+          ],
+          newNotificationCounter: this.state.newNotificationCounter + 1
         });
       }
     });
@@ -77,10 +107,24 @@ class Conference extends Component {
           type: toast.TYPE.WARNING,
           autoClose: 2000
         });
+        this.setState({
+          listOfCurrentNotifications: [
+            ...this.state.listOfCurrentNotifications,
+            `Your broadcast is stopped`
+          ],
+          newNotificationCounter: this.state.newNotificationCounter + 1
+        });
       } else {
         toast(` ${data.data.username} stopped his/her broadcast`, {
           type: toast.TYPE.WARNING,
           autoClose: 2000
+        });
+        this.setState({
+          listOfCurrentNotifications: [
+            ...this.state.listOfCurrentNotifications,
+            `${data.data.username} stopped his/her broadcast`
+          ],
+          newNotificationCounter: this.state.newNotificationCounter + 1
         });
       }
     });
@@ -90,6 +134,13 @@ class Conference extends Component {
         type: toast.TYPE.WARNING,
         autoClose: 2000
       });
+      this.setState({
+        listOfCurrentNotifications: [
+          ...this.state.listOfCurrentNotifications,
+          `Someone left the table`
+        ],
+        newNotificationCounter: this.state.newNotificationCounter + 1
+      });
     });
     this.state.socket.on("internet issue", data => {
       console.log(data.data.username + " went offline");
@@ -98,10 +149,24 @@ class Conference extends Component {
           type: toast.TYPE.ERROR,
           autoClose: 2000
         });
+        this.setState({
+          listOfCurrentNotifications: [
+            ...this.state.listOfCurrentNotifications,
+            `You got internet issues and are offline.`
+          ],
+          newNotificationCounter: this.state.newNotificationCounter + 1
+        });
       } else {
         toast(` ${data.data.username} got internet issues and went offline.`, {
           type: toast.TYPE.ERROR,
           autoClose: 2000
+        });
+        this.setState({
+          listOfCurrentNotifications: [
+            ...this.state.listOfCurrentNotifications,
+            `${data.data.username} got internet issues and went offline.`
+          ],
+          newNotificationCounter: this.state.newNotificationCounter + 1
         });
       }
     });
@@ -181,7 +246,19 @@ class Conference extends Component {
     });
     this.initializeSockets();
   }
-
+  showNotifications = () => {
+    if (this.state.showNotification) {
+      this.setState({
+        showNotification: false,
+        newNotificationCounter: 0
+      });
+    } else {
+      this.setState({
+        showNotification: true,
+        newNotificationCounter: 0
+      });
+    }
+  };
   render() {
     let cameraModule =
       this.state.broadcastState == "Start Broadcast" ? (
@@ -193,7 +270,7 @@ class Conference extends Component {
               backgroundColor: "black",
               textAlign: "center",
               color: "white",
-              width: "96%"
+              width: "95%"
             }}
           >
             {this.state.username}
@@ -203,7 +280,6 @@ class Conference extends Component {
             height={500}
             screenshotFormat="image/jpeg"
             style={{
-              border: "2px solid black",
               borderRadius: "4px",
               transform: "scaleX(-1)"
             }}
@@ -221,23 +297,48 @@ class Conference extends Component {
       >
         <ToastContainer hideProgressBar newestOnTop={false} />
 
-        <button onClick={this.startBroadcast}>
-          {this.state.broadcastState}
+        <button
+          onClick={this.startBroadcast}
+          style={{
+            backgroundColor: "#49A02D",
+            borderRadius: "50%",
+            height: "50px",
+            width: "50px",
+            outline: "none",
+            color: "white",
+            cursor: "pointer",
+            position: "absolute",
+            bottom: "285px",
+            right: "10px"
+          }}
+        >
+          {this.state.broadcastState == "Start Broadcast" ? "Start" : "Stop"}
+        </button>
+        <button
+          onClick={this.showNotifications}
+          style={{
+            backgroundColor: "#49A02D",
+            borderRadius: "50%",
+            height: "50px",
+            width: "50px",
+            outline: "none",
+            color: "white",
+            cursor: "pointer",
+            position: "absolute",
+            bottom: "340px",
+            right: "10px"
+          }}
+        >
+          {this.state.showNotification
+            ? "Hide"
+            : `Show ${this.state.newNotificationCounter}`}{" "}
         </button>
         <Offline
           onChange={({ isOffline, isOnline }) =>
             this.userNetworkChange(isOffline, isOnline)
           }
-        >
-          {({ isOffline, isOnline }) => {
-            return isOffline ? (
-              <div>{"I am offline"}</div>
-            ) : (
-              <div>{"I am online"}</div>
-            );
-          }}
-        </Offline>
-        <div style={{ display: "flex", flexWrap: "nowrap" }}>
+        />
+        <div style={{ display: "flex", flexWrap: "nowrap", marginTop: "50px" }}>
           <div
             style={{
               width: "50%",
@@ -246,8 +347,15 @@ class Conference extends Component {
           >
             {cameraModule}
           </div>
+
           <div style={{ width: "50%" }}>
-            <Notification />
+            {this.state.showNotification ? (
+              <Notification
+                notifications={this.state.listOfCurrentNotifications}
+              />
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

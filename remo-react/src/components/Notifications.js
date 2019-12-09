@@ -6,21 +6,45 @@ class Notification extends Component {
   constructor(props) {
     super();
     this.state = {
-      username: ""
+      listOfNotifications: []
     };
   }
+  componentDidMount() {
+    this.setState({
+      listOfNotifications: this.props.notifications
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.notifications !== this.props.notifications) {
+      this.setState({
+        listOfNotifications: nextProps.notifications
+      });
+    }
+  }
 
-  componentDidMount() {}
   render() {
     return (
       <div
         style={{
           backgroundColor: "#eff5e1",
           width: "500px",
-          borderRadius: "4px"
+          borderRadius: "4px",
+          border: "2px solid black",
+          marginTop: "10px"
         }}
       >
-        <h1>Show Notifications here</h1>
+        <h1> Notifications </h1>{" "}
+        {this.state.listOfNotifications.map(eachNotification => (
+          <p
+            style={{
+              border: "2px solid black",
+              padding: "10px",
+              margin: "5px"
+            }}
+          >
+            {eachNotification}
+          </p>
+        ))}
       </div>
     );
   }
