@@ -27,7 +27,15 @@ class Conference extends Component {
       newNotificationCounter: 0
     };
   }
-
+  addToNotification = notification => {
+    this.setState({
+      listOfCurrentNotifications: [
+        ...this.state.listOfCurrentNotifications,
+        notification
+      ],
+      newNotificationCounter: this.state.newNotificationCounter + 1
+    });
+  };
   initializeSockets = () => {
     // var socket = ;
 
@@ -51,25 +59,15 @@ class Conference extends Component {
           type: toast.TYPE.SUCCESS,
           autoClose: 2000
         });
-        this.setState({
-          listOfCurrentNotifications: [
-            ...this.state.listOfCurrentNotifications,
-            "You have successfully joined the table!"
-          ],
-          newNotificationCounter: this.state.newNotificationCounter + 1
-        });
+        this.addToNotification(`You have successfully joined the table!`);
       } else {
         toast(`${data.data.username} has successfully joined the table`, {
           type: toast.TYPE.SUCCESS,
           autoClose: 2000
         });
-        this.setState({
-          listOfCurrentNotifications: [
-            ...this.state.listOfCurrentNotifications,
-            `${data.data.username} has successfully joined the table`
-          ],
-          newNotificationCounter: this.state.newNotificationCounter + 1
-        });
+        this.addToNotification(
+          `${data.data.username} has successfully joined the table`
+        );
       }
     });
     this.state.socket.on("show broadcast", data => {
@@ -79,25 +77,13 @@ class Conference extends Component {
           type: toast.TYPE.SUCCESS,
           autoClose: 2000
         });
-        this.setState({
-          listOfCurrentNotifications: [
-            ...this.state.listOfCurrentNotifications,
-            "Your broadcast started successfully!"
-          ],
-          newNotificationCounter: this.state.newNotificationCounter + 1
-        });
+        this.addToNotification(`Your broadcast started successfully!`);
       } else {
         toast(`Broadcast is started by ${data.data.username}`, {
           type: toast.TYPE.SUCCESS,
           autoClose: 2000
         });
-        this.setState({
-          listOfCurrentNotifications: [
-            ...this.state.listOfCurrentNotifications,
-            `Broadcast is started by ${data.data.username}`
-          ],
-          newNotificationCounter: this.state.newNotificationCounter + 1
-        });
+        this.addToNotification(`Broadcast is started by ${data.data.username}`);
       }
     });
     this.state.socket.on("stop broadcast", data => {
@@ -107,25 +93,15 @@ class Conference extends Component {
           type: toast.TYPE.WARNING,
           autoClose: 2000
         });
-        this.setState({
-          listOfCurrentNotifications: [
-            ...this.state.listOfCurrentNotifications,
-            `Your broadcast is stopped`
-          ],
-          newNotificationCounter: this.state.newNotificationCounter + 1
-        });
+        this.addToNotification(`Your broadcast is stopped`);
       } else {
         toast(` ${data.data.username} stopped his/her broadcast`, {
           type: toast.TYPE.WARNING,
           autoClose: 2000
         });
-        this.setState({
-          listOfCurrentNotifications: [
-            ...this.state.listOfCurrentNotifications,
-            `${data.data.username} stopped his/her broadcast`
-          ],
-          newNotificationCounter: this.state.newNotificationCounter + 1
-        });
+        this.addToNotification(
+          `${data.data.username} stopped his/her broadcast`
+        );
       }
     });
     this.state.socket.on("user disconnected", () => {
@@ -134,13 +110,7 @@ class Conference extends Component {
         type: toast.TYPE.WARNING,
         autoClose: 2000
       });
-      this.setState({
-        listOfCurrentNotifications: [
-          ...this.state.listOfCurrentNotifications,
-          `Someone left the table`
-        ],
-        newNotificationCounter: this.state.newNotificationCounter + 1
-      });
+      this.addToNotification(`Someone left the table`);
     });
     this.state.socket.on("internet issue", data => {
       console.log(data.data.username + " went offline");
@@ -149,25 +119,15 @@ class Conference extends Component {
           type: toast.TYPE.ERROR,
           autoClose: 2000
         });
-        this.setState({
-          listOfCurrentNotifications: [
-            ...this.state.listOfCurrentNotifications,
-            `You got internet issues and are offline.`
-          ],
-          newNotificationCounter: this.state.newNotificationCounter + 1
-        });
+        this.addToNotification(`You got internet issues and are offline.`);
       } else {
         toast(` ${data.data.username} got internet issues and went offline.`, {
           type: toast.TYPE.ERROR,
           autoClose: 2000
         });
-        this.setState({
-          listOfCurrentNotifications: [
-            ...this.state.listOfCurrentNotifications,
-            `${data.data.username} got internet issues and went offline.`
-          ],
-          newNotificationCounter: this.state.newNotificationCounter + 1
-        });
+        this.addToNotification(
+          `${data.data.username} got internet issues and went offline.`
+        );
       }
     });
     this.state.socket.on("internet issue resolved", data => {
@@ -177,11 +137,13 @@ class Conference extends Component {
           type: toast.TYPE.INFO,
           autoClose: 2000
         });
+        this.addToNotification(`You are online again!`);
       } else {
         toast(` ${data.data.username} is online again!`, {
           type: toast.TYPE.INFO,
           autoClose: 2000
         });
+        this.addToNotification(`${data.data.username} is online again!`);
       }
     });
     this.state.socket.on("camera issue", data => {
@@ -193,11 +155,13 @@ class Conference extends Component {
           type: toast.TYPE.ERROR,
           autoClose: 2000
         });
+        this.addToNotification(`You have  got camera issues`);
       } else {
         toast(` ${data.data.username} has got camera issues`, {
           type: toast.TYPE.ERROR,
           autoClose: 2000
         });
+        this.addToNotification(`${data.data.username} has got camera issues`);
       }
     });
   };
