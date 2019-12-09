@@ -34,17 +34,19 @@ class Notification extends Component {
         }}
       >
         <h1> Notifications </h1>{" "}
-        {this.state.listOfNotifications.map(eachNotification => (
-          <p
-            style={{
-              border: "2px solid black",
-              padding: "10px",
-              margin: "5px"
-            }}
-          >
-            {eachNotification}
-          </p>
-        ))}
+        <div style={{ maxHeight: "500px", overflow: "scroll" }}>
+          {this.state.listOfNotifications.map(eachNotification => (
+            <p
+              style={{
+                border: "2px solid black",
+                padding: "10px",
+                margin: "5px"
+              }}
+            >
+              {eachNotification}
+            </p>
+          ))}
+        </div>
       </div>
     );
   }

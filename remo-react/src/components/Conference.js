@@ -30,8 +30,8 @@ class Conference extends Component {
   addToNotification = notification => {
     this.setState({
       listOfCurrentNotifications: [
-        ...this.state.listOfCurrentNotifications,
-        notification
+        notification,
+        ...this.state.listOfCurrentNotifications
       ],
       newNotificationCounter: this.state.newNotificationCounter + 1
     });
