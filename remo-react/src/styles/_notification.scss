@@ -1,0 +1,16 @@
+.notification {
+  background-color: #eff5e1;
+  width: 500px;
+  border-radius: 4px;
+  border: 2px solid black;
+  margin-top: 10px;
+  &__container {
+    max-height: 500px;
+    overflow: scroll;
+  }
+  &__each-notification {
+    border: 2px solid black;
+    padding: 10px;
+    margin: 5px;
+  }
+}

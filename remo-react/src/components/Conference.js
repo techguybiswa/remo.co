@@ -12,6 +12,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Offline from "react-offline";
 import Webcam from "react-webcam";
+import UseAnimations from "react-useanimations";
+import { FaBell, FaWindowClose, FaVideo, FaVideoSlash } from "react-icons/fa";
+import "../styles/style.scss";
 
 import { Component } from "react";
 
@@ -228,91 +231,74 @@ class Conference extends Component {
       this.state.broadcastState == "Start Broadcast" ? (
         ""
       ) : (
-        <div style={{}}>
-          <div
-            style={{
-              backgroundColor: "black",
-              textAlign: "center",
-              color: "white",
-              width: "95%"
-            }}
-          >
+        <div>
+          <div className="conference__camera-module-background">
             {this.state.username}
           </div>
           <Webcam
             audio={false}
             height={500}
             screenshotFormat="image/jpeg"
-            style={{
-              borderRadius: "4px",
-              transform: "scaleX(-1)"
-            }}
+            className="conference__webcam"
             onUserMediaError={this.cameraHasError}
           />
         </div>
       );
     return (
-      <div
-        style={{
-          backgroundImage: `url('https://i.ibb.co/TRknhGM/Screenshot-2019-12-07-at-8-52-18-PM.png')`,
-          height: "100vh",
-          paddingTop: "10px"
-        }}
-      >
+      <div className="conference">
         <ToastContainer hideProgressBar newestOnTop={false} />
 
         <button
           onClick={this.startBroadcast}
-          style={{
-            backgroundColor: "#49A02D",
-            borderRadius: "50%",
-            height: "50px",
-            width: "50px",
-            outline: "none",
-            color: "white",
-            cursor: "pointer",
-            position: "absolute",
-            bottom: "285px",
-            right: "10px"
-          }}
+          className="conference__button--start"
         >
-          {this.state.broadcastState == "Start Broadcast" ? "Start" : "Stop"}
+          {this.state.broadcastState == "Start Broadcast" ? (
+            <div>
+              <h1 className="conference__icon">
+                <FaVideoSlash />
+              </h1>
+            </div>
+          ) : (
+            <div>
+              <h1 className="conference__icon">
+                <FaVideo />
+              </h1>
+            </div>
+          )}
         </button>
         <button
           onClick={this.showNotifications}
-          style={{
-            backgroundColor: "#49A02D",
-            borderRadius: "50%",
-            height: "50px",
-            width: "50px",
-            outline: "none",
-            color: "white",
-            cursor: "pointer",
-            position: "absolute",
-            bottom: "340px",
-            right: "10px"
-          }}
+          className="conference__button--notification"
         >
-          {this.state.showNotification
-            ? "Hide"
-            : `Show ${this.state.newNotificationCounter}`}{" "}
+          {this.state.showNotification ? (
+            <div>
+              {" "}
+              <h1 className="conference__icon">
+                {" "}
+                <FaWindowClose />
+              </h1>
+            </div>
+          ) : (
+            <h1 className="conference__icon">
+              <FaBell />
+              {this.state.newNotificationCounter ? (
+                <p className="conference__notification-badge">
+                  {this.state.newNotificationCounter}
+                </p>
+              ) : null}
+            </h1>
+          )}{" "}
         </button>
+
         <Offline
           onChange={({ isOffline, isOnline }) =>
             this.userNetworkChange(isOffline, isOnline)
           }
         />
-        <div style={{ display: "flex", flexWrap: "nowrap", marginTop: "50px" }}>
-          <div
-            style={{
-              width: "50%",
-              padding: "20px"
-            }}
-          >
-            {cameraModule}
-          </div>
+        <div className="conference__container">
+          <div className="conference__camera-module">{cameraModule}</div>
 
-          <div style={{ width: "50%" }}>
+          <div>
             {this.state.showNotification ? (
               <Notification
                 notifications={this.state.listOfCurrentNotifications}
@@ -326,5 +312,4 @@ class Conference extends Component {
     );
   }
 }
-
 export default Conference;

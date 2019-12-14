@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Component } from "react";
+import "../styles/style.scss";
 
 class Notification extends Component {
   constructor(props) {
@@ -24,25 +25,11 @@ class Notification extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          backgroundColor: "#eff5e1",
-          width: "500px",
-          borderRadius: "4px",
-          border: "2px solid black",
-          marginTop: "10px"
-        }}
-      >
+      <div className="notification">
         <h1> Notifications </h1>{" "}
-        <div style={{ maxHeight: "500px", overflow: "scroll" }}>
+        <div className="notification__container">
           {this.state.listOfNotifications.map(eachNotification => (
-            <p
-              style={{
-                border: "2px solid black",
-                padding: "10px",
-                margin: "5px"
-              }}
-            >
+            <p className="notification__each-notification ">
               {eachNotification}
             </p>
           ))}
