@@ -35,14 +35,6 @@ io.on("connection", function(socket) {
   socket.on("camera error emit", data => {
     io.emit("camera issue", { data: data });
   });
-
-  // socket.emit("news", { hello: "world" });
-  // socket.on("disconnect", function() {
-  //   io.emit("user disconnected");
-  // });
-  // socket.on("newuser", function(data) {
-  //   socket.emit("new user connected", { data: data });
-  // });
 });
 
 module.exports = app;
